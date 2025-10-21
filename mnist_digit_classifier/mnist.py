@@ -45,4 +45,6 @@ Y_train_unencoded = load_labels("../data/mnist/train-labels-idx1-ubyte.gz")
 
 Y_train = one_hot_encode(Y_train_unencoded)
 
-Y_test = load_labels("../data/mnist/t10k-labels-idx1-ubyte.gz")
+Y_test_all = load_labels("../data/mnist/t10k-labels-idx1-ubyte.gz")
+
+Y_validation, Y_test = np.split(Y_test_all, 2)
