@@ -23,9 +23,6 @@ def load_labels(filename):
 
         return np.frombuffer(all_labels, dtype = np.uint8).reshape(-1, 1)
 
-#def encode_fives(Y):
-#    return (Y == 1).astype(int)
-
 def one_hot_encode(Y):
     n_labels = Y.shape[0]
     n_classes = 10
@@ -37,14 +34,30 @@ def one_hot_encode(Y):
 
     return encoded_Y
 
-X_train = prepend_bias(load_images("../data/mnist/train-images-idx3-ubyte.gz")) 
+def standardize(training_set, test_set):
+    average = np.average(training_set)
+    standard_deviation = np.std(training_set)
 
-X_test =  prepend_bias(load_images("../data/mnist/t10k-images-idx3-ubyte.gz")) 
+    training_set_standardized = (training_set - average) / standard_deviation
+
+    test_set_standardized = (test_set - average) / standard_deviation
+
+    return (training_set_standardized, test_set_standardized)
+
+
+#X_train = load_images("../data/mnist/train-images-idx3-ubyte.gz") 
+
+#X_test =  load_images("../data/mnist/t10k-images-idx3-ubyte.gz") 
+
+X_train_raw = load_images("../data/mnist/train-images-idx3-ubyte.gz")
+X_test_raw = load_images("../data/mnist/t10k-images-idx3-ubyte.gz")
+
+X_train, X_test_all = standardize(X_train_raw, X_test_raw)
+X_validation, X_test = np.split(X_test_all, 2)
+
 
 Y_train_unencoded = load_labels("../data/mnist/train-labels-idx1-ubyte.gz")
-
 Y_train = one_hot_encode(Y_train_unencoded)
 
 Y_test_all = load_labels("../data/mnist/t10k-labels-idx1-ubyte.gz")
-
 Y_validation, Y_test = np.split(Y_test_all, 2)
