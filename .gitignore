@@ -2,3 +2,5 @@
 /.vscode
 __pycache__/
 *.txt
+/overfitting/boundary.py
+/overfitting/echidna.py
